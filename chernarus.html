@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chernarus Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html,body{height:100%;margin:0;padding:0;background:#0a0a0f;color:#fff;font-family:Arial,Helvetica,sans-serif;}
+#map{height:100%;width:100%;}
+#coords{position:fixed;bottom:10px;left:10px;background:rgba(0,0,0,0.5);padding:4px 8px;border-radius:4px;font-size:12px;}
+.leaflet-container{filter:brightness(0.8) contrast(1.2);}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="coords">Coords:</div>
+<script>
+// --- Initialize map ---
+const map = L.map('map').setView([48.8, 15.3], 6);
+L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  subdomains:['a','b','c'],
+  maxZoom:17,
+  attribution:'© OpenTopoMap contributors'
+}).addTo(map);
+
+// --- Example markers ---
+const markers = [
+  {lat:48.8,lng:15.3,name:'Chernarus Trader',desc:'General goods'},
+  {lat:48.9,lng:15.5,name:'Crash Site',desc:'Loot area'}
+];
+markers.forEach(m=>{
+  L.marker([m.lat,m.lng]).addTo(map)
+   .bindPopup(`<b>${m.name}</b><br>${m.desc}`);
+});
+
+// --- Coordinate tracker ---
+const coordBox=document.getElementById('coords');
+map.on('mousemove',e=>{
+  coordBox.textContent=`Coords: ${e.latlng.lat.toFixed(3)}, ${e.latlng.lng.toFixed(3)}`;
+});
+</script>
+</body>
+</html>
